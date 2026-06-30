@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cedric Abimana · HR & Recruiting Operations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Playfair+Display:ital,wght@0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f8fc;
+  --surface: #ffffff;
+  --surface2: #eef0f7;
+  --border: rgba(30,40,80,0.1);
+  --text: #1a1f3c;
+  --muted: rgba(26,31,60,0.52);
+  --accent: #0057ff;
+  --accent2: #00b4d8;
+  --gold: #f0a500;
+  --gradient: linear-gradient(135deg, #0057ff 0%, #00b4d8 100%);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor */
+.cursor {
+  width: 10px; height: 10px;
+  background: var(--accent);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9999;
+  transition: transform 0.15s ease, opacity 0.2s;
+  mix-blend-mode: screen;
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(0,87,255,0.35);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9998;
+  transition: transform 0.4s cubic-bezier(.25,.46,.45,.94);
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 3rem;
+  background: rgba(247,248,252,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800; font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  background: var(--gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.nav-links { display: flex; gap: 2.5rem; align-items: center; }
+.nav-links a {
+  text-decoration: none; color: var(--muted);
+  font-size: 0.83rem; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--accent); }
+.nav-cta {
+  padding: 0.55rem 1.4rem;
+  border: 1px solid rgba(0,87,255,0.35);
+  border-radius: 2px; color: var(--accent) !important;
+  transition: background 0.2s !important;
+}
+.nav-cta:hover { background: rgba(0,87,255,0.08) !important; }
+.nav-download {
+  padding: 0.55rem 1.2rem;
+  background: var(--gradient) !important;
+  border-radius: 2px; color: #fff !important;
+  font-weight: 700 !important; opacity: 1 !important;
+  font-size: 0.8rem !important;
+  transition: opacity 0.2s !important;
+}
+.nav-download:hover { opacity: 0.85 !important; }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 6rem 3rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 50%, rgba(0,87,255,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(0,180,216,0.07) 0%, transparent 60%);
+}
+.grid-overlay {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(26,31,60,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,31,60,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-content { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; width: 100%; }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.4rem 1rem; border: 1px solid var(--border);
+  border-radius: 100px; font-size: 0.75rem; color: var(--muted);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 2rem;
+  background: rgba(0,87,255,0.05);
+  font-weight: 700;
+}
+.tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+
+h1 {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(3.5rem, 7vw, 6.5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+h1 .name-accent {
+  display: block;
+  background: var(--gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+h1 .italic-line {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-weight: 400;
+  color: rgba(26,31,60,0.35);
+}
+
+.hero-desc {
+  font-size: 1.1rem; line-height: 1.75;
+  color: var(--muted); max-width: 540px;
+  margin-bottom: 2.5rem;
+}
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 4rem; }
+.btn {
+  padding: 0.9rem 2rem; font-family: 'Nunito', sans-serif;
+  font-size: 0.85rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; border-radius: 2px;
+  cursor: pointer; text-decoration: none; display: inline-block;
+  transition: all 0.25s;
+}
+.btn-filled {
+  background: var(--gradient); color: #fff;
+  border: none;
+}
+.btn-filled:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,87,255,0.2); }
+.btn-outline {
+  background: transparent; color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-download-hero {
+  background: transparent; color: var(--accent);
+  border: 1px solid rgba(0,87,255,0.35);
+  font-size: 0.85rem; font-weight: 700;
+}
+.btn-download-hero:hover { background: rgba(0,87,255,0.07); border-color: var(--accent); }
+
+.hero-stats {
+  display: flex; gap: 3rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--border);
+}
+.stat-num {
+  font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 700;
+  background: var(--gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
+
+/* ABOUT */
+.about-section {
+  padding: 7rem 3rem;
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+  align-items: center;
+}
+.section-eyebrow {
+  font-family: 'Nunito', sans-serif; font-size: 0.72rem;
+  font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 1rem;
+}
+h2 {
+  font-family: 'Nunito', sans-serif; font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 800; line-height: 1.15;
+  letter-spacing: -0.02em; margin-bottom: 1.2rem;
+}
+h2 em { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; color: var(--accent); }
+.about-text { font-size: 0.97rem; line-height: 1.8; color: var(--muted); margin-bottom: 1rem; }
+.interests { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; }
+.interest-tag {
+  padding: 0.4rem 1rem; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 100px;
+  font-size: 0.8rem; color: var(--muted);
+  transition: all 0.2s;
+}
+.interest-tag:hover { border-color: var(--accent); color: var(--accent); }
+
+.skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+.skill-item {
+  display: flex; align-items: center; gap: 0.8rem;
+  padding: 0.8rem 1rem; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 4px;
+  font-size: 0.82rem; color: var(--muted);
+  transition: all 0.2s;
+}
+.skill-item:hover { border-color: rgba(0,87,255,0.3); color: var(--text); background: var(--surface2); }
+.skill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+/* EXPERIENCE TIMELINE */
+.experience-section {
+  padding: 7rem 3rem;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.experience-inner { max-width: 1100px; margin: 0 auto; }
+.experience-inner > .section-eyebrow { margin-bottom: 0.5rem; }
+.experience-inner > h2 { margin-bottom: 3.5rem; }
+
+.timeline { position: relative; padding-left: 2px; }
+.timeline::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 1px; background: var(--border);
+}
+.timeline-item {
+  display: grid; grid-template-columns: 240px 1fr;
+  gap: 2.5rem; padding: 2rem 0 2.5rem 2.5rem;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+.timeline-item:last-child { border-bottom: none; }
+.timeline-item::before {
+  content: ''; position: absolute; left: -4px; top: 2.3rem;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--bg); border: 1px solid var(--accent);
+  transition: background 0.2s;
+}
+.timeline-item:hover::before { background: var(--accent); }
+
+.tl-meta { padding-top: 0.2rem; }
+.tl-company { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 600; color: var(--accent); letter-spacing: 0.04em; }
+.tl-date { font-size: 0.78rem; color: var(--muted); margin-top: 0.3rem; }
+.tl-location { font-size: 0.75rem; color: rgba(232,237,242,0.3); margin-top: 0.15rem; }
+
+.tl-title { font-family: 'Nunito', sans-serif; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+.tl-bullets { list-style: none; }
+.tl-bullets li {
+  font-size: 0.88rem; line-height: 1.65; color: var(--muted);
+  padding: 0.3rem 0; display: flex; gap: 0.7rem;
+}
+.tl-bullets li::before { content: '↗'; color: var(--accent); flex-shrink: 0; font-size: 0.75rem; margin-top: 0.15rem; }
+.tl-tag-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+.tl-tag {
+  padding: 0.25rem 0.7rem; background: rgba(0,87,255,0.06);
+  border: 1px solid rgba(0,87,255,0.15); border-radius: 2px;
+  font-size: 0.72rem; color: rgba(0,87,255,0.75); letter-spacing: 0.04em; font-weight: 700;
+}
+
+/* FOCUS AREAS */
+.focus-section { padding: 7rem 3rem; }
+.focus-inner { max-width: 1100px; margin: 0 auto; }
+.focus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+.focus-card {
+  padding: 2.5rem; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 4px;
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.focus-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; background: var(--gradient);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s;
+}
+.focus-card:hover { border-color: rgba(0,201,167,0.2); transform: translateY(-4px); }
+.focus-card:hover::before { transform: scaleX(1); }
+.focus-icon { font-size: 2rem; margin-bottom: 1.2rem; }
+.focus-card h3 { font-family: 'Nunito', sans-serif; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; }
+.focus-card p { font-size: 0.88rem; line-height: 1.7; color: var(--muted); }
+
+/* PROJECTS */
+.projects-section {
+  padding: 7rem 3rem;
+  background: var(--surface2);
+  border-top: 1px solid var(--border);
+}
+.projects-inner { max-width: 1100px; margin: 0 auto; }
+.projects-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;
+}
+.projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+.project-card {
+  padding: 2.5rem; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 4px;
+  transition: all 0.3s; cursor: default;
+}
+.project-card:hover { border-color: rgba(0,87,255,0.25); transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,87,255,0.08); }
+.project-num {
+  font-family: 'Nunito', sans-serif; font-size: 0.7rem; font-weight: 800;
+  letter-spacing: 0.12em; color: var(--muted); margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+.project-num::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.project-card h3 { font-family: 'Nunito', sans-serif; font-size: 1.2rem; font-weight: 800; margin-bottom: 0.7rem; }
+.project-card p { font-size: 0.88rem; line-height: 1.7; color: var(--muted); margin-bottom: 1.5rem; }
+.project-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.project-tag {
+  padding: 0.25rem 0.7rem;
+  background: rgba(0,180,216,0.08); border: 1px solid rgba(0,180,216,0.2);
+  border-radius: 2px; font-size: 0.72rem; color: rgba(0,130,200,0.9); font-weight: 700;
+}
+.project-card.add-card {
+  border-style: dashed; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  min-height: 220px; cursor: pointer;
+}
+.project-card.add-card:hover { border-color: var(--accent); }
+.add-icon {
+  width: 52px; height: 52px; border-radius: 50%;
+  border: 1px dashed rgba(0,87,255,0.35);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; color: var(--accent); margin-bottom: 1rem;
+}
+.add-label { font-size: 0.9rem; color: var(--muted); }
+
+/* ACHIEVEMENTS */
+.achieve-section { padding: 7rem 3rem; background: var(--bg); border-top: 1px solid var(--border); }
+.achieve-inner { max-width: 1100px; margin: 0 auto; }
+.achieve-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 3rem; background: var(--border); border: 1px solid var(--border); }
+.achieve-item {
+  background: var(--surface); padding: 2.5rem 2rem;
+  text-align: center;
+}
+.achieve-num {
+  font-family: 'Nunito', sans-serif; font-size: 2.8rem; font-weight: 800;
+  background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+.achieve-label { font-size: 0.82rem; color: var(--muted); margin-top: 0.5rem; line-height: 1.4; }
+
+/* EDUCATION & CERTS */
+.edu-section { padding: 7rem 3rem; background: var(--surface2); border-top: 1px solid var(--border); }
+.edu-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+.edu-list { list-style: none; margin-top: 2rem; }
+.edu-item {
+  padding: 1.5rem; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 4px;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s;
+}
+.edu-item:hover { border-color: rgba(0,87,255,0.25); }
+.edu-degree { font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 800; }
+.edu-school { font-size: 0.85rem; color: var(--accent); margin-top: 0.2rem; font-weight: 600; }
+.edu-date { font-size: 0.75rem; color: var(--muted); margin-top: 0.15rem; }
+
+.cert-list { list-style: none; margin-top: 2rem; }
+.cert-item {
+  display: flex; gap: 1rem; align-items: flex-start;
+  padding: 1.2rem 0; border-bottom: 1px solid var(--border);
+}
+.cert-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 0.1rem; }
+.cert-name { font-size: 0.9rem; font-weight: 700; }
+.cert-org { font-size: 0.78rem; color: var(--muted); margin-top: 0.1rem; }
+
+/* CONTACT */
+.contact-section {
+  padding: 7rem 3rem;
+  text-align: center;
+  position: relative; overflow: hidden;
+  background: var(--surface);
+}
+.contact-section::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,87,255,0.05) 0%, transparent 70%);
+}
+.contact-inner { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+.contact-section h2 { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 1rem; }
+.contact-section p { font-size: 1rem; color: var(--muted); margin-bottom: 2.5rem; line-height: 1.7; }
+.contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+.contact-link {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.8rem 1.5rem; border: 1px solid var(--border);
+  border-radius: 2px; text-decoration: none; color: var(--muted);
+  font-size: 0.85rem; font-weight: 600; transition: all 0.2s;
+  background: var(--bg);
+}
+.contact-link:hover { border-color: var(--accent); color: var(--accent); }
+
+/* TESTIMONIALS */
+.testi-section {
+  padding: 7rem 3rem;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+}
+.testi-section-inner { max-width: 1100px; margin: 0 auto; }
+.testi-carousel {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+.testi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2rem;
+  display: flex; flex-direction: column;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  position: relative; overflow: hidden;
+}
+.testi-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gradient);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.35s;
+}
+.testi-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,87,255,0.08); border-color: rgba(0,87,255,0.2); }
+.testi-card:hover::before { transform: scaleX(1); }
+.testi-quote-mark {
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem; line-height: 0.7;
+  color: var(--accent); opacity: 0.25;
+  margin-bottom: 0.5rem;
+  user-select: none;
+}
+.testi-text {
+  font-size: 0.9rem; line-height: 1.75;
+  color: var(--muted); flex: 1;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+.testi-text strong { font-style: normal; color: var(--text); font-weight: 700; }
+.testi-footer { display: flex; align-items: center; gap: 0.9rem; margin-top: auto; }
+.testi-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--gradient);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 800;
+  color: #fff; flex-shrink: 0;
+}
+.testi-name { font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 800; color: var(--text); }
+.testi-role { font-size: 0.75rem; color: var(--muted); margin-top: 0.1rem; line-height: 1.3; }
+.testi-company-badge {
+  margin-left: auto;
+  padding: 0.2rem 0.6rem;
+  background: rgba(0,87,255,0.07);
+  border: 1px solid rgba(0,87,255,0.15);
+  border-radius: 2px;
+  font-size: 0.68rem; font-weight: 700;
+  color: var(--accent); letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* FOOTER */
+footer {
+  padding: 2rem 3rem; border-top: 1px solid var(--border);
+  background: var(--bg);
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.78rem; color: var(--muted); font-weight: 600;
+}
+
+/* ANIMATIONS - progressive enhancement only */
+.reveal {
+  opacity: 1; transform: translateY(0);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.js-loaded .reveal {
+  opacity: 0; transform: translateY(30px);
+}
+.js-loaded .reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 5rem 1.5rem 3rem; }
+  h1 { font-size: 3rem; }
+  .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+  .about-section, .edu-inner { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 1.5rem; }
+  .experience-section, .focus-section, .projects-section, .achieve-section, .edu-section, .contact-section, .testi-section { padding: 4rem 1.5rem; }
+  .timeline-item { grid-template-columns: 1fr; gap: 0.5rem; }
+  .focus-grid, .projects-grid, .testi-carousel { grid-template-columns: 1fr; }
+  .achieve-grid { grid-template-columns: 1fr 1fr; }
+  footer { flex-direction: column; gap: 1rem; text-align: center; }
+  body { cursor: auto; }
+  .cursor, .cursor-ring { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">CEDRIC ABIMANA</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#experience">Experience</a>
+    <a href="projects.html">Projects</a>
+    <a href="#testimonials">Recommendations</a>
+    <a href="#" onclick="downloadResume(); return false;" class="nav-download">⬇ Resume</a>
+    <a href="#contact" class="nav-cta">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-tag">
+      <span class="tag-dot"></span>
+      Available for new opportunities
+    </div>
+    <h1>
+      <span class="name-accent">Cedric Abimana</span>
+      <span class="italic-line">HR & Recruiting</span>
+      Operations Leader
+    </h1>
+    <p class="hero-desc">
+      8+ years building high-performance recruiting operations at Meta, The Trade Desk, and UNICEF. I turn broken hiring processes into scalable systems and I'm obsessed with how AI will reshape talent acquisition.
+    </p>
+    <div class="hero-actions">
+      <a href="#experience" class="btn btn-filled">View My Work</a>
+      <a href="#contact" class="btn btn-outline">Get In Touch</a>
+      <a href="#" onclick="downloadResume(); return false;" class="btn btn-download-hero">⬇ Download Resume</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">8+</div>
+        <div class="stat-label">Years in HR & TA Operations</div>
+      </div>
+      <div>
+        <div class="stat-num">400+</div>
+        <div class="stat-label">Recruiters Supported at Meta</div>
+      </div>
+      <div>
+        <div class="stat-num">95%</div>
+        <div class="stat-label">Onboarding Satisfaction Rate</div>
+      </div>
+      <div>
+        <div class="stat-num">200+</div>
+        <div class="stat-label">Candidate Long-Lists at UNICEF</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div>
+    <div class="section-eyebrow reveal">About Me</div>
+    <h2 class="reveal">Building the <em>future</em> of recruiting operations</h2>
+    <p class="about-text reveal">I'm a strategic HR and Recruiting Operations leader based in Jersey City, NJ with a track record of designing systems that scale, reducing friction in hiring pipelines, and elevating the candidate experience from first touch to offer.</p>
+    <p class="about-text reveal">My career spans global enterprises (Meta, UNICEF), fast-growth startups (Headway, WeWork), and mission-driven organizations. I thrive at the intersection of people, process, and technology.</p>
+    <div class="interests reveal">
+      <span class="interest-tag">🤖 AI in Recruiting</span>
+      <span class="interest-tag">⚙️ Process Optimization</span>
+      <span class="interest-tag">📊 Talent Analytics</span>
+      <span class="interest-tag">🌐 Global TA Operations</span>
+      <span class="interest-tag">🧠 People Strategy</span>
+    </div>
+  </div>
+  <div>
+    <div class="section-eyebrow reveal">Core Tools & Skills</div>
+    <div class="skills-grid reveal">
+      <div class="skill-item"><span class="skill-dot"></span>Greenhouse</div>
+      <div class="skill-item"><span class="skill-dot"></span>Workday</div>
+      <div class="skill-item"><span class="skill-dot"></span>LinkedIn Recruiter</div>
+      <div class="skill-item"><span class="skill-dot"></span>Tableau</div>
+      <div class="skill-item"><span class="skill-dot"></span>SAP SuccessFactors</div>
+      <div class="skill-item"><span class="skill-dot"></span>GoodTime</div>
+      <div class="skill-item"><span class="skill-dot"></span>UKG</div>
+      <div class="skill-item"><span class="skill-dot"></span>Boolean Search</div>
+      <div class="skill-item"><span class="skill-dot"></span>ATS Management</div>
+      <div class="skill-item"><span class="skill-dot"></span>Payroll Administration</div>
+      <div class="skill-item"><span class="skill-dot"></span>People Management</div>
+      <div class="skill-item"><span class="skill-dot"></span>Project Management</div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="experience-section" id="experience">
+  <div class="experience-inner">
+    <div class="section-eyebrow reveal">Career</div>
+    <h2 class="reveal">Where I've <em>made impact</em></h2>
+    <div class="timeline">
+
+      <div class="timeline-item reveal">
+        <div class="tl-meta">
+          <div class="tl-company">The Trade Desk</div>
+          <div class="tl-date">Mar 2025 · Present</div>
+          <div class="tl-location">New York City, NY</div>
+        </div>
+        <div>
+          <div class="tl-title">Senior Candidate Experience Partner</div>
+          <ul class="tl-bullets">
+            <li>Led high-volume, complex interview scheduling for global Software Engineering roles, enhancing consistency and efficiency at scale.</li>
+            <li>Owned operational workflows including background checks, offer generation, and pre-boarding, ensuring cross-jurisdictional compliance.</li>
+            <li>Drove cross-functional process improvement initiatives from ideation to execution, delivering measurable gains in candidate satisfaction.</li>
+          </ul>
+          <div class="tl-tag-row">
+            <span class="tl-tag">SWE Recruiting</span>
+            <span class="tl-tag">Process Improvement</span>
+            <span class="tl-tag">Compliance</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="tl-meta">
+          <div class="tl-company">Midea America Corp</div>
+          <div class="tl-date">Jun 2023 · Mar 2025</div>
+          <div class="tl-location">Parsippany, NJ</div>
+        </div>
+        <div>
+          <div class="tl-title">HR Operations Manager</div>
+          <ul class="tl-bullets">
+            <li>Achieved a 95% onboarding satisfaction rate while streamlining HR processes for a 200+ employee workforce.</li>
+            <li>Conducted HR audits to enhance compliance and identify operational improvements across payroll, leave, and benefits.</li>
+            <li>Maintained HRIS systems (Workday, UKG), overseeing data integrity and leading successful system implementation projects.</li>
+          </ul>
+          <div class="tl-tag-row">
+            <span class="tl-tag">HRIS Management</span>
+            <span class="tl-tag">HR Audits</span>
+            <span class="tl-tag">Onboarding</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="tl-meta">
+          <div class="tl-company">Meta (Facebook)</div>
+          <div class="tl-date">Jan 2022 · Jan 2023</div>
+          <div class="tl-location">New York City, NY</div>
+        </div>
+        <div>
+          <div class="tl-title">Recruiting Coordination Lead</div>
+          <ul class="tl-bullets">
+            <li>Led a team of 9 recruiting coordinators supporting 400+ SWE early career recruiters and sourcers hiring globally.</li>
+            <li>Defined overarching strategy for the coordination team and drove process improvement initiatives with recruiting leadership.</li>
+            <li>Managed priorities, goals, and performance monitoring in a fully remote, fast-paced environment.</li>
+          </ul>
+          <div class="tl-tag-row">
+            <span class="tl-tag">Team Leadership</span>
+            <span class="tl-tag">Global Recruiting</span>
+            <span class="tl-tag">Strategy</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="tl-meta">
+          <div class="tl-company">Headway</div>
+          <div class="tl-date">Jul 2021 · Jan 2022</div>
+          <div class="tl-location">New York City, NY</div>
+        </div>
+        <div>
+          <div class="tl-title">Talent Operations Lead</div>
+          <ul class="tl-bullets">
+            <li>Orchestrated scalable systems to support rapid company growth, owning the company-wide referral and onboarding program.</li>
+            <li>Tracked and reported weekly on key metrics: time to hire, scorecard completion, and top-of-funnel pass-through rates.</li>
+          </ul>
+          <div class="tl-tag-row">
+            <span class="tl-tag">Recruiting Metrics</span>
+            <span class="tl-tag">Onboarding</span>
+            <span class="tl-tag">Scalable Systems</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="tl-meta">
+          <div class="tl-company">WeWork</div>
+          <div class="tl-date">Feb 2019 · Jul 2021</div>
+          <div class="tl-location">New York City, NY</div>
+        </div>
+        <div>
+          <div class="tl-title">Senior Associate, Talent Acquisition Operations</div>
+          <ul class="tl-bullets">
+            <li>Optimized recruitment processes and drove operational efficiency, serving as the process subject matter expert for all TA administrative tasks.</li>
+            <li>Hired, onboarded, and trained new recruiting coordinators ensuring effective tool usage and consistency across the team.</li>
+          </ul>
+          <div class="tl-tag-row">
+            <span class="tl-tag">TA Operations</span>
+            <span class="tl-tag">Workday</span>
+            <span class="tl-tag">Training</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="tl-meta">
+          <div class="tl-company">UNICEF</div>
+          <div class="tl-date">Jul 2017 · Feb 2019</div>
+          <div class="tl-location">New York City, NY</div>
+        </div>
+        <div>
+          <div class="tl-title">HR Associate, Talent Sourcing & Analytics</div>
+          <ul class="tl-bullets">
+            <li>Drove strategic talent sourcing for international professionals, managing requisitions and prescreening within ATS systems.</li>
+            <li>Produced 200+ candidate long-lists for hiring managers across global country offices, assessing minimum eligibility and competencies.</li>
+          </ul>
+          <div class="tl-tag-row">
+            <span class="tl-tag">Talent Sourcing</span>
+            <span class="tl-tag">ATS</span>
+            <span class="tl-tag">Global HR</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOCUS AREAS -->
+<section class="focus-section" id="focus">
+  <div class="focus-inner">
+    <div class="section-eyebrow reveal">Areas of Expertise</div>
+    <h2 class="reveal">What I'm <em>passionate about</em></h2>
+    <div class="focus-grid">
+      <div class="focus-card reveal">
+        <div class="focus-icon">⚙️</div>
+        <h3>Recruiting Operations</h3>
+        <p>Designing end-to-end hiring systems that scale, from ATS configuration and SLA governance to cross-functional workflow design and compliance management across jurisdictions.</p>
+      </div>
+      <div class="focus-card reveal reveal-delay-1">
+        <div class="focus-icon">📈</div>
+        <h3>Process Improvement</h3>
+        <p>Identifying inefficiencies in talent pipelines and building solutions with measurable impact. I believe every recruiting bottleneck is a data problem waiting to be solved.</p>
+      </div>
+      <div class="focus-card reveal reveal-delay-2">
+        <div class="focus-icon">🤖</div>
+        <h3>AI & the Future of Recruiting</h3>
+        <p>Exploring how large language models, intelligent scheduling, and AI-driven sourcing tools are transforming talent acquisition, and what it means for the humans behind it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- PROJECTS TEASER -->
+<section class="projects-section" id="projects" style="text-align: center;">
+  <div class="projects-inner">
+    <div class="section-eyebrow reveal">Projects & Initiatives</div>
+    <h2 class="reveal">Work beyond <em>the job title</em></h2>
+    <p style="font-size: 0.97rem; line-height: 1.8; color: var(--muted); max-width: 540px; margin: 0 auto 2rem;">A closer look at the systems, dashboards, and candidate facing tools I've built across Meta, Midea, Headway, and The Trade Desk, including an interactive walkthrough you can click through yourself.</p>
+    <a href="projects.html" class="btn btn-filled reveal">View All Projects →</a>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section class="achieve-section">
+  <div class="achieve-inner">
+    <div class="section-eyebrow reveal" style="text-align:center">By the Numbers</div>
+    <h2 class="reveal" style="text-align:center">Impact that <em>speaks</em></h2>
+    <div class="achieve-grid reveal">
+      <div class="achieve-item">
+        <div class="achieve-num">95%</div>
+        <div class="achieve-label">Onboarding satisfaction rate at Midea</div>
+      </div>
+      <div class="achieve-item">
+        <div class="achieve-num">400+</div>
+        <div class="achieve-label">Global recruiters supported at Meta</div>
+      </div>
+      <div class="achieve-item">
+        <div class="achieve-num">200+</div>
+        <div class="achieve-label">Candidate long-lists built at UNICEF</div>
+      </div>
+      <div class="achieve-item">
+        <div class="achieve-num">9</div>
+        <div class="achieve-label">Coordinators led at Meta</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION & CERTS -->
+<section class="edu-section" id="education">
+  <div class="edu-inner">
+    <div>
+      <div class="section-eyebrow reveal">Education</div>
+      <h2 class="reveal">Academic <em>foundation</em></h2>
+      <ul class="edu-list">
+        <li class="edu-item reveal">
+          <div class="edu-degree">BS in Economics</div>
+          <div class="edu-school">Penn State University</div>
+          <div class="edu-date">State College, PA</div>
+        </li>
+        <li class="edu-item reveal">
+          <div class="edu-degree">BS in Labor Studies & Employment Relations</div>
+          <div class="edu-school">Penn State University</div>
+          <div class="edu-date">Minor in Business</div>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <div class="section-eyebrow reveal">Certifications</div>
+      <h2 class="reveal">Continued <em>learning</em></h2>
+      <ul class="cert-list">
+        <li class="cert-item reveal">
+          <div class="cert-icon">🗄️</div>
+          <div>
+            <div class="cert-name">Master SQL for Data Science</div>
+            <div class="cert-org">Udemy · Oct – Nov 2021</div>
+          </div>
+        </li>
+        <li class="cert-item reveal">
+          <div class="cert-icon">📊</div>
+          <div>
+            <div class="cert-name">Spreadsheet Fundamentals</div>
+            <div class="cert-org">Recalc Academy · Sep – Oct 2021</div>
+          </div>
+        </li>
+        <li class="cert-item reveal">
+          <div class="cert-icon">📋</div>
+          <div>
+            <div class="cert-name">PMP Certification Exam Prep</div>
+            <div class="cert-org">Technical Institute of America · May – Jul 2023</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-section" id="testimonials">
+  <div class="testi-section-inner">
+    <div class="section-eyebrow reveal">LinkedIn Recommendations</div>
+    <h2 class="reveal">What colleagues <em>say</em></h2>
+    <div class="testi-carousel">
+
+      <div class="testi-card reveal">
+        <div class="testi-quote-mark">"</div>
+        <p class="testi-text">His dedication to HR operations, from payroll to employee support, is truly impressive. He has a knack for <strong>making complex processes seamless</strong> and always brings a thoughtful, people-first approach to his work.</p>
+        <div class="testi-footer">
+          <div class="testi-avatar">WN</div>
+          <div>
+            <div class="testi-name">Wing Lam (Michelle) Ng</div>
+            <div class="testi-role">HR Coordinator, TerraForm Power</div>
+          </div>
+          <span class="testi-company-badge">Midea</span>
+        </div>
+      </div>
+
+      <div class="testi-card reveal reveal-delay-1">
+        <div class="testi-quote-mark">"</div>
+        <p class="testi-text">Cedric consistently demonstrated a <strong>proactive approach to improving and streamlining HR processes</strong>, always seeking ways to make the department more efficient. His calm and approachable demeanor made him a go-to person for employees.</p>
+        <div class="testi-footer">
+          <div class="testi-avatar">SP</div>
+          <div>
+            <div class="testi-name">Saaylee Potnis</div>
+            <div class="testi-role">Manager, Midea America</div>
+          </div>
+          <span class="testi-company-badge">Midea</span>
+        </div>
+      </div>
+
+      <div class="testi-card reveal reveal-delay-2">
+        <div class="testi-quote-mark">"</div>
+        <p class="testi-text">Cedric always was <strong>teaching me, the team, and employees outside of my team new techniques</strong> and completely streamlining all of our processes. His strengths are his adaptability, his ability to stay calm under pressure, and his passion for systems.</p>
+        <div class="testi-footer">
+          <div class="testi-avatar">SL</div>
+          <div>
+            <div class="testi-name">Stephanie Lehman</div>
+            <div class="testi-role">Head of Recruiting, Glossier</div>
+          </div>
+          <span class="testi-company-badge">WeWork</span>
+        </div>
+      </div>
+
+      <div class="testi-card reveal">
+        <div class="testi-quote-mark">"</div>
+        <p class="testi-text">His attention to detail, willingness to delve into <strong>deep data regarding all things talent</strong>, eagerness to collaborate, and willingness to pitch in wherever needed were much appreciated. His calm and collected demeanor was contagious.</p>
+        <div class="testi-footer">
+          <div class="testi-avatar">JA</div>
+          <div>
+            <div class="testi-name">Jake Arbeitman</div>
+            <div class="testi-role">Colleague, Headway</div>
+          </div>
+          <span class="testi-company-badge">Headway</span>
+        </div>
+      </div>
+
+      <div class="testi-card reveal reveal-delay-1">
+        <div class="testi-quote-mark">"</div>
+        <p class="testi-text">His <strong>exceptional expertise in strategic sourcing and talent management</strong> catapulted the section's in-reach and outreach initiatives. He is a dynamic team player who used data to support better informed decisions, making our team more agile.</p>
+        <div class="testi-footer">
+          <div class="testi-avatar">PI</div>
+          <div>
+            <div class="testi-name">Petroneilla Iyeleza</div>
+            <div class="testi-role">HR Business Partner, UNICEF</div>
+          </div>
+          <span class="testi-company-badge">UNICEF</span>
+        </div>
+      </div>
+
+      <div class="testi-card reveal reveal-delay-2">
+        <div class="testi-quote-mark">"</div>
+        <p class="testi-text">His attention to detail earned him the nickname <strong>"The Captain of the Ship"</strong> from the Emergencies and Surge team. Due to his positive attitude and willingness to teach and share his skills, Cedric made it easy for new members to adjust and settle in.</p>
+        <div class="testi-footer">
+          <div class="testi-avatar">BK</div>
+          <div>
+            <div class="testi-name">Benita Kyeyune-Lutaya</div>
+            <div class="testi-role">Talent Acquisition, UNICEF</div>
+          </div>
+          <span class="testi-company-badge">UNICEF</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="section-eyebrow reveal" style="text-align:center">Let's Connect</div>
+    <h2 class="reveal">Let's build something <em>together</em></h2>
+    <p class="reveal">Whether you're looking for a recruiting operations leader, want to discuss the future of AI in talent acquisition, or just want to connect, I'd love to hear from you.</p>
+    <div class="contact-links reveal">
+      <a href="/cdn-cgi/l/email-protection#06657f673337343046616b676f6a2865696b" class="contact-link">
+        <span>✉</span> <span class="__cf_email__" data-cfemail="22415b431713101462454f434b4e0c414d4f">[email&#160;protected]</span>
+      </a>
+      <a href="tel:3474538194" class="contact-link">
+        <span>📱</span> (347) 453-8194
+      </a>
+      <a href="https://linkedin.com" target="_blank" class="contact-link">
+        <span>in</span> LinkedIn
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>© 2026 Cedric Abimana. All rights reserved.</div>
+  <div>Jersey City, NJ · Open to opportunities</div>
+</footer>
+
+<script>
+  // Download resume
+  function downloadResume() {
+    const link = document.createElement('a');
+    link.href = 'Cedric_Abimana_Resume_2025.pdf';
+    link.download = 'Cedric_Abimana_Resume_2025.pdf';
+    link.click();
+  }
+
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+  });
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Scroll reveal - progressive enhancement (content visible by default)
+  document.documentElement.classList.add('js-loaded');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
