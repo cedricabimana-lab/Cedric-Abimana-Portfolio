@@ -95,7 +95,7 @@ nav {
 .hero {
   min-height: 100vh;
   display: flex; align-items: center;
-  padding: 6rem 3rem 4rem;
+  padding: 6rem 3rem 2rem;
   position: relative;
   overflow: hidden;
 }
@@ -146,10 +146,24 @@ h1 .italic-line {
 
 .hero-desc {
   font-size: 1.1rem; line-height: 1.75;
-  color: var(--muted); max-width: 540px;
+  color: var(--muted); max-width: 1100px;
   margin-bottom: 2.5rem;
+  font-weight: 700;
 }
-.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 4rem; }
+.hero-stats-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 1.5rem;
+}
+.hero-stat-item {
+  background: var(--surface);
+  padding: 2.5rem 2rem;
+  text-align: center;
+}
+@media (max-width: 900px) {
+  .hero-stats-grid { grid-template-columns: 1fr 1fr; }
+}
 .btn {
   padding: 0.9rem 2rem; font-family: 'Nunito', sans-serif;
   font-size: 0.85rem; font-weight: 700; letter-spacing: 0.06em;
@@ -188,7 +202,7 @@ h1 .italic-line {
 
 /* ABOUT */
 .about-section {
-  padding: 7rem 3rem;
+  padding: 3rem 3rem 7rem;
   max-width: 1100px; margin: 0 auto;
   display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
   align-items: center;
@@ -525,7 +539,7 @@ footer {
     <a href="#experience">Experience</a>
     <a href="projects.html">Projects</a>
     <a href="#testimonials">Recommendations</a>
-    <a href="#" onclick="downloadResume(); return false;" class="nav-download">⬇ Resume</a>
+    <a href="#" onclick="downloadResume(); return false;" class="nav-download">Download Resume</a>
     <a href="#contact" class="nav-cta">Contact</a>
   </div>
 </nav>
@@ -541,34 +555,12 @@ footer {
     </div>
     <h1>
       <span class="name-accent">Cedric Abimana</span>
-      <span class="italic-line">HR & Recruiting</span>
-      Operations Leader
+      <span class="italic-line">HR & Recruiting Operations</span>
     </h1>
-    <p class="hero-desc">
-      8+ years building high-performance recruiting operations at Meta, The Trade Desk, and UNICEF. I turn broken hiring processes into scalable systems and I'm obsessed with how AI will reshape talent acquisition.
-    </p>
     <div class="hero-actions">
       <a href="#experience" class="btn btn-filled">View My Work</a>
       <a href="#contact" class="btn btn-outline">Get In Touch</a>
-      <a href="#" onclick="downloadResume(); return false;" class="btn btn-download-hero">⬇ Download Resume</a>
-    </div>
-    <div class="hero-stats">
-      <div>
-        <div class="stat-num">8+</div>
-        <div class="stat-label">Years in HR & TA Operations</div>
-      </div>
-      <div>
-        <div class="stat-num">400+</div>
-        <div class="stat-label">Recruiters Supported at Meta</div>
-      </div>
-      <div>
-        <div class="stat-num">95%</div>
-        <div class="stat-label">Onboarding Satisfaction Rate</div>
-      </div>
-      <div>
-        <div class="stat-num">200+</div>
-        <div class="stat-label">Candidate Long-Lists at UNICEF</div>
-      </div>
+      <a href="#" onclick="downloadResume(); return false;" class="btn btn-download-hero">Download Resume</a>
     </div>
   </div>
 </section>
@@ -578,14 +570,13 @@ footer {
   <div>
     <div class="section-eyebrow reveal">About Me</div>
     <h2 class="reveal">Building the <em>future</em> of recruiting operations</h2>
-    <p class="about-text reveal">I'm a strategic HR and Recruiting Operations leader based in Jersey City, NJ with a track record of designing systems that scale, reducing friction in hiring pipelines, and elevating the candidate experience from first touch to offer.</p>
-    <p class="about-text reveal">My career spans global enterprises (Meta, UNICEF), fast-growth startups (Headway, WeWork), and mission-driven organizations. I thrive at the intersection of people, process, and technology.</p>
+    <p class="about-text reveal">I build recruiting operations that scale. Behind every seamless hiring experience is an operational engine designed to move fast. For 8+ years, I've worked at big tech and high-growth startups to build the systems, workflows, and processes that power recruiting organizations. From interview operations and program management to process optimization and operational strategy, I turn complex hiring challenges into scalable solutions that help teams hire smarter and faster.</p>
     <div class="interests reveal">
-      <span class="interest-tag">🤖 AI in Recruiting</span>
-      <span class="interest-tag">⚙️ Process Optimization</span>
-      <span class="interest-tag">📊 Talent Analytics</span>
-      <span class="interest-tag">🌐 Global TA Operations</span>
-      <span class="interest-tag">🧠 People Strategy</span>
+      <span class="interest-tag">AI in Recruiting</span>
+      <span class="interest-tag">Process Optimization</span>
+      <span class="interest-tag">Talent Analytics</span>
+      <span class="interest-tag">Global TA Operations</span>
+      <span class="interest-tag">People Strategy</span>
     </div>
   </div>
   <div>
@@ -603,6 +594,32 @@ footer {
       <div class="skill-item"><span class="skill-dot"></span>Payroll Administration</div>
       <div class="skill-item"><span class="skill-dot"></span>People Management</div>
       <div class="skill-item"><span class="skill-dot"></span>Project Management</div>
+    </div>
+  </div>
+</section>
+
+<!-- BY THE NUMBERS -->
+<section class="achieve-section">
+  <div class="achieve-inner">
+    <div class="section-eyebrow reveal" style="text-align: center;">By the Numbers</div>
+    <h2 class="reveal" style="text-align: center; margin-bottom: 1.5rem;">Impact that <em>speaks</em></h2>
+    <div class="hero-stats-grid" style="max-width: 1100px; margin: 0 auto;">
+      <div class="hero-stat-item">
+        <div class="achieve-num">8+</div>
+        <div class="achieve-label">Years in HR & TA Operations</div>
+      </div>
+      <div class="hero-stat-item">
+        <div class="achieve-num">400+</div>
+        <div class="achieve-label">Recruiters & Sourcers Supported Globally</div>
+      </div>
+      <div class="hero-stat-item">
+        <div class="achieve-num">95%</div>
+        <div class="achieve-label">Onboarding Satisfaction Rate</div>
+      </div>
+      <div class="hero-stat-item">
+        <div class="achieve-num">9</div>
+        <div class="achieve-label">Recruiting Coordinators Led at Meta</div>
+      </div>
     </div>
   </div>
 </section>
@@ -748,17 +765,17 @@ footer {
     <h2 class="reveal">What I'm <em>passionate about</em></h2>
     <div class="focus-grid">
       <div class="focus-card reveal">
-        <div class="focus-icon">⚙️</div>
+        
         <h3>Recruiting Operations</h3>
         <p>Designing end-to-end hiring systems that scale, from ATS configuration and SLA governance to cross-functional workflow design and compliance management across jurisdictions.</p>
       </div>
       <div class="focus-card reveal reveal-delay-1">
-        <div class="focus-icon">📈</div>
+        
         <h3>Process Improvement</h3>
         <p>Identifying inefficiencies in talent pipelines and building solutions with measurable impact. I believe every recruiting bottleneck is a data problem waiting to be solved.</p>
       </div>
       <div class="focus-card reveal reveal-delay-2">
-        <div class="focus-icon">🤖</div>
+        
         <h3>AI & the Future of Recruiting</h3>
         <p>Exploring how large language models, intelligent scheduling, and AI-driven sourcing tools are transforming talent acquisition, and what it means for the humans behind it.</p>
       </div>
@@ -777,31 +794,6 @@ footer {
   </div>
 </section>
 
-<!-- ACHIEVEMENTS -->
-<section class="achieve-section">
-  <div class="achieve-inner">
-    <div class="section-eyebrow reveal" style="text-align:center">By the Numbers</div>
-    <h2 class="reveal" style="text-align:center">Impact that <em>speaks</em></h2>
-    <div class="achieve-grid reveal">
-      <div class="achieve-item">
-        <div class="achieve-num">95%</div>
-        <div class="achieve-label">Onboarding satisfaction rate at Midea</div>
-      </div>
-      <div class="achieve-item">
-        <div class="achieve-num">400+</div>
-        <div class="achieve-label">Global recruiters supported at Meta</div>
-      </div>
-      <div class="achieve-item">
-        <div class="achieve-num">200+</div>
-        <div class="achieve-label">Candidate long-lists built at UNICEF</div>
-      </div>
-      <div class="achieve-item">
-        <div class="achieve-num">9</div>
-        <div class="achieve-label">Coordinators led at Meta</div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- EDUCATION & CERTS -->
 <section class="edu-section" id="education">
@@ -827,24 +819,17 @@ footer {
       <h2 class="reveal">Continued <em>learning</em></h2>
       <ul class="cert-list">
         <li class="cert-item reveal">
-          <div class="cert-icon">🗄️</div>
+          
           <div>
             <div class="cert-name">Master SQL for Data Science</div>
             <div class="cert-org">Udemy · Oct – Nov 2021</div>
           </div>
         </li>
         <li class="cert-item reveal">
-          <div class="cert-icon">📊</div>
+          
           <div>
             <div class="cert-name">Spreadsheet Fundamentals</div>
             <div class="cert-org">Recalc Academy · Sep – Oct 2021</div>
-          </div>
-        </li>
-        <li class="cert-item reveal">
-          <div class="cert-icon">📋</div>
-          <div>
-            <div class="cert-name">PMP Certification Exam Prep</div>
-            <div class="cert-org">Technical Institute of America · May – Jul 2023</div>
           </div>
         </li>
       </ul>
@@ -948,15 +933,9 @@ footer {
     <h2 class="reveal">Let's build something <em>together</em></h2>
     <p class="reveal">Whether you're looking for a recruiting operations leader, want to discuss the future of AI in talent acquisition, or just want to connect, I'd love to hear from you.</p>
     <div class="contact-links reveal">
-      <a href="/cdn-cgi/l/email-protection#06657f673337343046616b676f6a2865696b" class="contact-link">
-        <span>✉</span> <span class="__cf_email__" data-cfemail="22415b431713101462454f434b4e0c414d4f">[email&#160;protected]</span>
-      </a>
-      <a href="tel:3474538194" class="contact-link">
-        <span>📱</span> (347) 453-8194
-      </a>
-      <a href="https://linkedin.com" target="_blank" class="contact-link">
-        <span>in</span> LinkedIn
-      </a>
+      <a href="mailto:cya5126@gmail.com" class="contact-link">cya5126@gmail.com</a>
+      <a href="tel:3474538194" class="contact-link">(347) 453-8194</a>
+      <a href="https://www.linkedin.com/in/cedric-abimana-372868105/" target="_blank" class="contact-link">LinkedIn</a>
     </div>
   </div>
 </section>

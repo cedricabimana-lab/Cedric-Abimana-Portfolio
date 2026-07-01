@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cedric Abimana · AI Interview Prep Agent</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700&family=Space+Grotesk:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#060c16;
+    --teal-deep:#062a5c;
+    --teal:#0a3d82;
+    --teal-bright:#1f6fd6;
+    --mint:#0372E2;
+    --peach:#bcd9fb;
+    --text-hi:#eaf2fb;
+    --text-mid:#7fa3cf;
+    --text-dim:#4b6c96;
+    --danger:#e8836a;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; height:100%; width:100%;
+    font-family:'Inter',sans-serif;
+    color:var(--text-hi);
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 42%, rgba(3,114,226,0.07) 0%, transparent 70%),
+      var(--ink);
+    overflow:hidden;
+  }
+
+  #scene{
+    position:fixed; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+  }
+
+  #readout-wrap{
+    width:min(640px, 86vw);
+    min-height:120px;
+    max-height:38vh;
+    overflow-y:auto;
+    margin-bottom:26px;
+    padding:0 6px;
+    display:flex; flex-direction:column; gap:14px;
+    scrollbar-width:none;
+  }
+  #readout-wrap::-webkit-scrollbar{ display:none; }
+
+  .line{
+    font-family:'Space Grotesk', monospace;
+    font-size:15px;
+    line-height:1.65;
+    text-align:center;
+    letter-spacing:.01em;
+    animation: matIn .5s ease;
+  }
+  @keyframes matIn{
+    from{ opacity:0; transform:translateY(8px); filter:blur(2px); }
+    to{ opacity:1; transform:translateY(0); filter:blur(0); }
+  }
+  .line.you{
+    font-family:'Inter',sans-serif;
+    font-size:12.5px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+  }
+  .line.you::before{ content:'▸ '; color:var(--mint); }
+  .line.agent{
+    color:var(--mint);
+    text-shadow:
+      0 0 6px rgba(3,114,226,0.55),
+      0 0 18px rgba(3,114,226,0.25);
+  }
+  .line.agent .links-row{
+    display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:10px;
+  }
+  .link-chip{
+    font-family:'Inter',sans-serif; font-size:11px; letter-spacing:.04em;
+    padding:6px 12px; border-radius:20px; text-decoration:none;
+    background:rgba(3,114,226,0.08); color:var(--mint);
+    border:1px solid rgba(3,114,226,0.35);
+    text-shadow:none; text-transform:none;
+    transition:background .2s, box-shadow .2s;
+  }
+  .link-chip:hover{ background:rgba(3,114,226,0.18); box-shadow:0 0 14px rgba(3,114,226,0.3); }
+
+  .cursor{
+    display:inline-block; width:8px; height:15px; background:var(--mint);
+    margin-left:3px; vertical-align:-2px;
+    box-shadow:0 0 8px var(--mint);
+    animation: blink 0.9s steps(1) infinite;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  #orb-zone{
+    display:flex; flex-direction:column; align-items:center;
+  }
+  #orb{
+    width:118px; height:118px; border-radius:50%;
+    cursor:pointer; position:relative;
+    background:
+      radial-gradient(circle at 32% 28%, #8fc4fb 0%, var(--mint) 28%, var(--teal-bright) 62%, var(--teal-deep) 100%);
+    box-shadow: 0 10px 40px rgba(6,33,29,0.5), 0 0 0 1px rgba(3,114,226,0.15);
+    display:flex; align-items:center; justify-content:center;
+    transition:width .4s ease, height .4s ease, transform .3s cubic-bezier(.34,1.56,.64,1);
+    animation: breathe 4.2s ease-in-out infinite;
+  }
+  #orb::before{
+    content:''; position:absolute; inset:-14px; border-radius:50%;
+    border:1.5px solid rgba(3,114,226,0.5);
+    animation: wave1 2.8s cubic-bezier(.2,.6,.4,1) infinite;
+  }
+  #orb::after{
+    content:''; position:absolute; inset:-14px; border-radius:50%;
+    border:1px solid rgba(3,114,226,0.3);
+    animation: wave2 2.8s cubic-bezier(.2,.6,.4,1) infinite .9s;
+  }
+  /* third and fourth rings via box-shadow on a pseudo wrapper */
+  #orb-ring{
+    position:absolute; inset:0; border-radius:50%; pointer-events:none;
+    animation: wave3 2.8s cubic-bezier(.2,.6,.4,1) infinite 1.7s;
+    border:1px solid rgba(3,114,226,0.18);
+  }
+  #orb-ring::after{
+    content:''; position:absolute; inset:0; border-radius:50%;
+    border:0.5px solid rgba(3,114,226,0.1);
+    animation: wave4 2.8s cubic-bezier(.2,.6,.4,1) infinite 0.45s;
+  }
+  @keyframes wave1{
+    0%  { transform:scale(1);    opacity:.9; }
+    40% { transform:scale(1.45); opacity:.5; }
+    70% { transform:scale(1.8);  opacity:.2; }
+    100%{ transform:scale(2.2);  opacity:0;  }
+  }
+  @keyframes wave2{
+    0%  { transform:scale(1);    opacity:.7; }
+    35% { transform:scale(1.5);  opacity:.4; }
+    65% { transform:scale(1.9);  opacity:.15;}
+    100%{ transform:scale(2.5);  opacity:0;  }
+  }
+  @keyframes wave3{
+    0%  { transform:scale(1);    opacity:.55;}
+    30% { transform:scale(1.6);  opacity:.3; }
+    60% { transform:scale(2.1);  opacity:.1; }
+    100%{ transform:scale(2.8);  opacity:0;  }
+  }
+  @keyframes wave4{
+    0%  { transform:scale(1);    opacity:.4; }
+    25% { transform:scale(1.7);  opacity:.2; }
+    55% { transform:scale(2.3);  opacity:.08;}
+    100%{ transform:scale(3.2);  opacity:0;  }
+  }
+  #orb:hover{ transform: scale(1.05); }
+  #orb svg{ width:28px; height:28px; position:relative; z-index:2; }
+
+  #scene.active #orb{ width:86px; height:86px; }
+  #scene.active #orb svg{ width:22px; height:22px; }
+
+  @keyframes breathe{
+    0%,100%{ transform: scale(1); box-shadow: 0 10px 40px rgba(6,33,29,0.5), 0 0 0 1px rgba(3,114,226,0.15); }
+    50%{ transform: scale(1.1); box-shadow: 0 14px 50px rgba(3,114,226,0.4), 0 0 0 1px rgba(3,114,226,0.25); }
+  }
+  @keyframes pulseListen{
+    0%,100%{ box-shadow: 0 10px 40px rgba(6,33,29,0.5), 0 0 0 1px rgba(3,114,226,0.15); }
+    50%{ box-shadow: 0 10px 40px rgba(3,114,226,0.65), 0 0 0 10px rgba(3,114,226,0.18); }
+  }
+  #orb.thinking{ animation: breathe 1.1s ease-in-out infinite; }
+
+  #orb-caption{
+    margin-top:14px; font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--text-dim); opacity:0; transition:opacity .3s ease;
+    font-family:'Inter',sans-serif;
+  }
+  #scene:not(.active) #orb-zone:hover #orb-caption{ opacity:1; }
+
+  #filter-wrap{
+    margin-top:22px;
+    width:min(560px, 88vw);
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+    opacity:0; max-height:0; overflow:hidden;
+    transition:opacity .35s ease, max-height .4s ease;
+  }
+  #scene.filtering #filter-wrap{ opacity:1; max-height:400px; }
+  .filter-step{ display:none; flex-direction:column; align-items:center; gap:14px; width:100%; }
+  .filter-step.shown{ display:flex; animation: matIn .4s ease; }
+  .filter-q{
+    font-family:'Inter',sans-serif; font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--text-mid);
+  }
+  .filter-opts{ display:flex; flex-wrap:wrap; gap:9px; justify-content:center; }
+  .filter-opt{
+    font-family:'Space Grotesk',sans-serif; font-size:13.5px; padding:10px 18px; border-radius:24px;
+    background:rgba(255,255,255,0.03); color:var(--text-hi);
+    border:1px solid rgba(3,114,226,0.3); cursor:pointer; transition:all .2s;
+  }
+  .filter-opt:hover{
+    background:rgba(3,114,226,0.16); border-color:rgba(3,114,226,0.6);
+    box-shadow:0 0 16px rgba(3,114,226,0.25);
+  }
+  .filter-opt.unavailable{
+    opacity:.35; cursor:not-allowed; position:relative;
+  }
+  .filter-opt.unavailable:hover{
+    background:rgba(255,255,255,0.03); border-color:rgba(3,114,226,0.3);
+    box-shadow:none;
+  }
+  #track-error{
+    display:none; font-family:'Space Grotesk',sans-serif; font-size:13px; text-align:center;
+    color:#e8836a; letter-spacing:.01em; line-height:1.55;
+    padding:10px 16px; border-radius:12px;
+    background:rgba(232,131,106,0.08); border:1px solid rgba(232,131,106,0.25);
+    animation: matIn .3s ease;
+    max-width:380px;
+  }
+  #track-error span{ color:rgba(232,131,106,0.6); font-size:11px; display:block; margin-top:4px; letter-spacing:.06em; text-transform:uppercase; }
+    font-family:'Inter',sans-serif; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--text-dim); cursor:pointer; margin-top:2px; background:none; border:none;
+  }
+  .filter-back:hover{ color:var(--mint); }
+  .filter-progress{ display:flex; gap:6px; }
+  .filter-dot{ width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,0.15); transition:background .2s; }
+  .filter-dot.done{ background:var(--mint); box-shadow:0 0 6px var(--mint); }
+
+  #inputbar{
+    margin-top:24px;
+    width:min(520px, 86vw);
+    display:flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(3,114,226,0.25);
+    border-radius:30px;
+    padding:6px 7px 6px 18px;
+    opacity:0; transform:translateY(-8px) scale(.97);
+    max-height:0; overflow:hidden;
+    transition:opacity .35s ease, transform .35s ease, max-height .35s ease, margin .35s ease;
+  }
+  #scene.active #inputbar{
+    opacity:1; transform:translateY(0) scale(1); max-height:60px;
+    box-shadow:0 0 30px rgba(3,114,226,0.08);
+  }
+  #ta{
+    flex:1; border:none; outline:none; background:transparent;
+    color:var(--text-hi); font-family:'Inter',sans-serif; font-size:14px;
+    padding:8px 0;
+  }
+  #ta::placeholder{ color:var(--text-dim); }
+  .ibtn{
+    flex:none; width:38px; height:38px; border-radius:50%; border:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:all .2s;
+  }
+  #mic-btn{ background:rgba(255,255,255,0.05); color:var(--text-mid); }
+  #mic-btn:hover{ background:rgba(3,114,226,0.14); color:var(--mint); }
+  #mic-btn.active{ background:var(--danger); color:#fff; animation:pulseListen 1s infinite; }
+  #send-btn{ background:linear-gradient(135deg, var(--mint), var(--teal-bright)); color:#06211d; }
+  #send-btn:hover{ filter:brightness(1.08); }
+  #send-btn:disabled{ opacity:.35; cursor:default; }
+
+  #chips{
+    margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
+    max-width:560px; opacity:0; max-height:0; overflow:hidden;
+    transition:opacity .35s ease .1s, max-height .35s ease;
+  }
+  #scene.active #chips{ opacity:1; max-height:80px; }
+  #scene.has-history #chips{ display:none; }
+  .chip{
+    font-size:11.5px; padding:7px 13px; border-radius:20px; cursor:pointer;
+    background:rgba(255,255,255,0.03); color:var(--text-mid);
+    border:1px solid rgba(255,255,255,0.1); white-space:nowrap; transition:all .2s;
+    font-family:'Inter',sans-serif;
+  }
+  .chip:hover{ background:rgba(3,114,226,0.12); color:var(--mint); border-color:rgba(3,114,226,0.35); }
+
+  #memory-pill{
+    font-family:'Inter',sans-serif; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    color:rgba(3,114,226,0.7); display:none; align-items:center; gap:5px;
+    margin-top:10px; opacity:0; transition:opacity .4s ease;
+  }
+  #memory-pill.visible{ display:flex; opacity:1; }
+  #memory-pill svg{ flex:none; }
+  #memory-pill span{ color:var(--mint); font-weight:600; }
+
+  #footnote{
+    margin-top:18px; font-size:9.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--text-dim); opacity:0; transition:opacity .3s ease .15s;
+  }
+  #scene.active #footnote{ opacity:1; }
+
+  #brand{
+    position:fixed; top:24px; left:50%; transform:translateX(-50%);
+    font-family:'Orbitron',sans-serif; font-size:11px; letter-spacing:.3em;
+    color:var(--text-dim); text-transform:uppercase; opacity:.7;
+  }
+  #brand b{ color:var(--mint); }
+
+  #resources-corner{
+    position:fixed; right:24px; bottom:22px; z-index:20;
+    display:flex; flex-direction:column; align-items:flex-end; gap:6px;
+    font-family:'Inter',sans-serif;
+  }
+  #resources-corner .corner-label{
+    font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--text-dim);
+  }
+  #resources-corner a{
+    font-size:12.5px; color:var(--mint); text-decoration:none;
+    padding:7px 14px; border-radius:20px;
+    background:rgba(3,114,226,0.08); border:1px solid rgba(3,114,226,0.35);
+    transition:background .2s, box-shadow .2s;
+  }
+  #resources-corner a:hover{
+    background:rgba(3,114,226,0.18); box-shadow:0 0 16px rgba(3,114,226,0.3);
+  }
+</style>
+</head>
+<body>
+
+<div id="brand">the<b>trade</b>desk &nbsp;//&nbsp; prep agent</div>
+
+<div id="resources-corner">
+  <div class="corner-label">Resources</div>
+  <a href="https://leetcode.com/explore/interview/card/top-interview-questions-medium/" target="_blank" rel="noopener">LeetCode ↗</a>
+  <a href="https://careers.thetradedesk.com/" target="_blank" rel="noopener">Careers Page ↗</a>
+</div>
+
+<div id="scene">
+  <div id="readout-wrap"></div>
+
+  <div id="orb-zone">
+    <div id="orb" title="Tap to start">
+      <div id="orb-ring"></div>
+      <svg viewBox="0 0 24 24" fill="none"></svg>
+    </div>
+    <div id="orb-caption">Tap to begin prep</div>
+  </div>
+
+  <div id="filter-wrap">
+    <div class="filter-step" data-step="1">
+      <div class="filter-progress"><div class="filter-dot" id="dot1"></div><div class="filter-dot" id="dot2"></div></div>
+      <div class="filter-q">What level role are you interviewing for?</div>
+      <div class="filter-opts" id="level-opts"></div>
+    </div>
+    <div class="filter-step" data-step="2">
+      <div class="filter-progress"><div class="filter-dot done"></div><div class="filter-dot" id="dot2b"></div></div>
+      <div class="filter-q">What type of engineering role?</div>
+      <div class="filter-opts" id="track-opts"></div>
+      <div id="track-error">Prep materials for this track aren't loaded yet.<span>Check back soon — your recruiter will update this when they're ready.</span></div>
+      <button class="filter-back" id="filter-back">← back</button>
+    </div>
+  </div>
+
+  <div id="inputbar">
+    <button id="mic-btn" class="ibtn" title="Voice input">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+    </button>
+    <input id="ta" type="text" placeholder="Type or tap the mic to ask…" autocomplete="off" />
+    <button id="send-btn" class="ibtn" title="Send">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+    </button>
+  </div>
+
+  <div id="chips"></div>
+  <div id="memory-pill">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 8v4l3 3"/></svg>
+    remembering <span id="memory-count">0</span> previous exchange<span id="memory-plural">s</span>
+  </div>
+  <div id="footnote">Answers grounded in The Trade Desk's official prep guide</div>
+</div>
+
+<script>
+/* =========================================================================
+   QUESTION LOGGING (for FAQ building / recruiter analytics)
+   ------------------------------------------------------------------------
+   Set LOGGING_ENDPOINT to a webhook URL and every question + response will
+   be POSTed there as JSON: { question, response, timestamp, sessionId, page }
+
+   Recommended free option — Google Sheets via Apps Script:
+   1. Create a Google Sheet. Add header row:
+      Timestamp | Session | Theme | Level | Track | Question | Response | Page
+   2. Extensions > Apps Script, paste the doPost() script below, and deploy
+      as a Web App (Execute as: Me, Who has access: Anyone).
+   3. Copy the deployment URL into LOGGING_ENDPOINT below.
+
+   Every question is auto-tagged with a theme (see KNOWLEDGE_BASE.themes
+   below) so TA can filter/pivot the sheet by theme to see what candidates
+   ask about most. Edit KNOWLEDGE_BASE.themes to change the taxonomy.
+
+   --- Apps Script to paste into the Sheet's script editor ---
+   function doPost(e) {
+     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+     var data = JSON.parse(e.postData.contents);
+     sheet.appendRow([
+       new Date(data.timestamp),
+       data.sessionId,
+       data.theme,
+       data.level,
+       data.track,
+       data.question,
+       data.response,
+       data.page
+     ]);
+     return ContentService.createTextOutput(JSON.stringify({ status: "ok" }))
+       .setMimeType(ContentService.MimeType.JSON);
+   }
+   -------------------------------------------------------------
+
+   Other options: Airtable (via their REST API + a proxy), Supabase (REST
+   insert), or any custom serverless function (Cloudflare Worker, AWS
+   Lambda + API Gateway, etc.) that accepts a POST of JSON.
+
+   Leave LOGGING_ENDPOINT as "" to disable logging entirely.
+   ========================================================================= */
+const LOGGING_ENDPOINT = ""; // <-- paste your Web App / webhook URL here
+
+const SESSION_ID = (() => {
+  const key = "ttd_prep_session_id";
+  let id = sessionStorage.getItem ? null : null; // sessionStorage avoided per artifact rules; generate per page-load instead
+  return "sess_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+})();
+
+function logInteraction(question, response, theme){
+  if(!LOGGING_ENDPOINT) return;
+  const payload = {
+    question: question,
+    response: response,
+    theme: theme || "Uncategorized",
+    level: selectedLevel || "",
+    track: selectedTrack || "",
+    timestamp: new Date().toISOString(),
+    sessionId: SESSION_ID,
+    page: window.location.href
+  };
+  fetch(LOGGING_ENDPOINT, {
+    method: "POST",
+    mode: "no-cors", // Apps Script Web Apps don't return CORS headers by default
+    headers: { "Content-Type": "text/plain;charset=utf-8" }, // text/plain avoids CORS preflight
+    body: JSON.stringify(payload)
+  }).catch(err => console.warn("Logging failed (non-blocking):", err));
+}
+
+const KNOWLEDGE_BASE = {
+  companyName: "The Trade Desk",
+  source: "Software Engineering Interview Prep Guide (TTD, 2024, Confidential)",
+
+  interviewProcess: `Candidates meet with a total of 4 engineers across separate 60-minute interviews.
+Each interview: 5 minutes intros, 45 minutes on a technical problem, 10 minutes for the candidate's questions.
+There is also a behavioral-style interview that is NOT a technical/functional evaluation — it focuses on TTD's mission and values, plus communication, collaboration, conflict resolution, and (for people-manager roles) leadership approach.`,
+
+  systemDesign: `Goal: assess understanding of large-scale backend systems, since TTD works with large volumes of data and needs fast, scalable performance.
+Two types of system design questions: open-ended problems and guided questions (candidates can ask their recruiter to clarify the difference).
+The complexity is in the design itself. Focus areas:
+1. Requirement Gathering — ask lots of clarifying questions (e.g. how many users, what kind of data flows through the system, what future user volume is anticipated).
+2. Technology Choices & Trade-offs — any technology you mention, be ready to justify why you chose it, even if it's a great answer.
+3. Scalability, Optimization & Efficiency — large systems must handle increasing demand; bonus points for raising scalability/efficiency unprompted.`,
+
+  coding: `Coding interviews assess problem solving and familiarity with data structures & algorithms.
+Discuss with the interviewer upfront how they'd like the problem tackled — some prioritize clean, maintainable code, others prioritize just getting to a working solution to show problem-solving.
+Two types of problem-solving questions: one algorithmic, one focused on general coding principles (e.g. object-oriented design).
+Three focus areas:
+1. Coding — gather requirements, translate into written code; format expectations vary by interviewer, so clarify at the start.
+2. Data Structures & Algorithms — select efficient run-time solutions; build fast, correct algorithms and account for edge cases.
+3. Problem Solving — break down ambiguous problems, identify solutions, translate them into working code.`,
+
+  behavioral: `Not a technical or functional evaluation. Focuses on TTD's mission and values.
+May include questions on communication, collaboration, conflict resolution, and (for people-manager roles) approach to leadership.
+Prepare the same way you would for any standard behavioral interview (e.g. STAR-style stories).`,
+
+  tips: [
+    "TTD cares more about how you approach a problem than getting a 'perfect' answer — expect follow-up questions, and show your thinking on complex problems.",
+    "Ask a lot of clarifying questions upfront rather than assuming — both system requirements (like expected QPS) and process/format questions (e.g. should I optimize for performant code or just reach a solution).",
+    "The interviewer is there to support you, not trick you — hints are meant to help steer you, not catch you out.",
+    "Be concise. Start small and solve one piece at a time. Ask clarifying questions before diving in, and iterate on your solution as follow-ups come.",
+    "Come with thoughtful questions of your own — interviewing is a two-way street, so ask about team culture and priorities."
+  ],
+
+  companyValues: [
+    { name: "Vision", desc: "A unique view of what tomorrow looks like and how to get there — ambitious and passionate about creating the future for TTD and its customers/partners." },
+    { name: "Grit", desc: "We get it done — resolve, persistence, and commitment to the business, customers, partners, and each other." },
+    { name: "Generosity", desc: "A genuine desire to share, teach, and care for those around us, starting with empathy and humility to build trust quickly." },
+    { name: "Agility", desc: "Fast-moving and nimble — constantly iterating to support evolving needs of the people and brands TTD works with." },
+    { name: "Openness", desc: "Love to learn and experience new people, places, and ideas — insights can come from anywhere, so listening and embracing new thinking matters." },
+    { name: "Full-Hearted", desc: "We take our work seriously, but laughter isn't far away — we bring our whole selves to work and enjoy each other." }
+  ],
+
+  resources: [
+    { label: "Grokking the System Design Interview", url: "#", note: "Article on core system design patterns." },
+    { label: "System Design Interview Questions", url: "#", note: "Article with practice questions." },
+    { label: "System Design Mock Interview (YouTube)", url: "#", note: "Watch a full mock walkthrough." },
+    { label: "LeetCode", url: "https://leetcode.com", note: "Practice data structures & algorithms." },
+    { label: "The Trade Desk YouTube", url: "#", note: "Company & culture videos." },
+    { label: "The Trade Desk Careers Page", url: "#", note: "Open roles." },
+    { label: "Meet Our Teams", url: "#", note: "Get to know engineering teams." },
+    { label: "Life At TTD", url: "#", note: "Day-in-the-life content." }
+  ],
+
+  starterChips: [
+    "What should I expect overall?",
+    "How do I approach system design?",
+    "Tips for the coding interview?",
+    "What are TTD's values?",
+    "Recommend prep resources"
+  ],
+
+  // Candidate self-selected filters, gathered right after they click the orb.
+  // Used to tailor depth/complexity of coaching. Edit freely.
+  levels: ["SDE II", "Senior", "Staff", "Lead", "Manager"],
+  tracks: ["Front End", "Back End", "Full Stack", "Machine Learning"],
+
+  // Theme taxonomy for TA reporting — every question gets tagged with exactly
+  // one of these by the model. Edit freely; keep labels short and distinct.
+  themes: [
+    "Interview Process & Logistics",
+    "System Design",
+    "Coding & DSA",
+    "Behavioral & Values",
+    "Resources & Study Materials",
+    "Compensation & Offer",
+    "Role & Team Specifics",
+    "Other / Out of Scope"
+  ]
+};
+
+/* =========================================================================
+   FRONT END SPECIFIC KNOWLEDGE BASE
+   Source: Front-End Software Engineering Interview Prep Guide (TTD, 2026)
+   Only injected into the system prompt when the candidate selects "Front End".
+   Keep in sync with the official Front End prep PDF.
+   ========================================================================= */
+const FRONTEND_KNOWLEDGE = {
+  source: "Front-End Software Engineering Interview Prep Guide (TTD, 2026, Confidential)",
+
+  overview: `At The Trade Desk, front-end roles are more full-stack. Work is typically split 70% front-end and 30% back-end, though this can vary project to project.`,
+
+  interviewProcess: `Front-end candidates have 4 technical interviews total — 3 coding interviews and 1 system design interview. Each interview lasts 60 minutes: 5 minutes intros, 45 minutes on the technical problem, 10 minutes for candidate questions. Some roles also include a behavioral interview focused on TTD's mission and values (not a technical evaluation).`,
+
+  systemDesign: `The system design question for front-end engineers assesses understanding of how end-to-end systems work. While TTD has dedicated back-end teams, front-end engineers are expected to contribute to architecture discussions and understand how and why data flows through a system. The question will be open-ended and object-oriented.
+Focus areas:
+1. Requirement Gathering — ask questions like: How many users will be on the system? What kind of data flows through the system? What future user volume is anticipated?
+2. Technology Choices & Trade-offs — be ready to justify any technology you mention, even if it's the obviously right answer. Your interviewer will ask why.
+3. Scalability, Optimization & Efficiency — build these in proactively; bonus points for raising them without being prompted.`,
+
+  coding: `Three coding questions total:
+1. Two algorithmic questions focused on general coding principles (e.g. object-oriented design, data structures & algorithms, efficient run-time solutions, edge-case handling).
+2. One React-based problem where you optimize an existing app — designed to mirror day-to-day front-end work at TTD.
+Discuss with the interviewer upfront how they'd like the problem tackled — some want clean, maintainable code; others want to see you reach a working solution to demonstrate problem-solving ability.
+Key areas: Coding (gather requirements, translate to written code), Data Structures & Algorithms (efficient solutions, edge cases), Problem Solving (break down ambiguous problems, identify solutions, produce working code).`,
+
+  behavioral: `The behavioral interview is not a technical evaluation. It focuses on TTD's mission and values. May include questions on communication, collaboration, conflict resolution, and (for people-manager roles) leadership approach. Prepare the same way you would for any standard behavioral interview.`,
+
+  tips: [
+    "TTD cares more about how you approach the problem than a perfect answer — your interviewers want to see how you think through complex problems. Expect follow-up questions.",
+    "Ask lots of clarifying questions upfront — things like expected QPS, data types flowing through the system, or whether the interviewer wants clean performant code vs. a quick working solution.",
+    "Your interviewer is there to support you. If they give hints, it's to steer you, never to trick you.",
+    "Be concise. Start small, solve one thing at a time, and iterate as you ask questions or as follow-ups arrive.",
+    "Come with your own thoughtful questions — ask about team culture, the React codebase, front-end tooling, priorities, etc."
+  ]
+};
+
+function buildSystemPrompt(level, track){
+  const kb = KNOWLEDGE_BASE;
+  const isFrontEnd = track && track.toLowerCase().includes("front");
+  const fe = FRONTEND_KNOWLEDGE;
+
+  const candidateContext = (level || track)
+    ? `\nCANDIDATE CONTEXT: This candidate is interviewing for a ${level || "unspecified-level"} role on the ${track || "unspecified"} track. Tailor your coaching accordingly: at higher levels (Staff, Lead, Manager) lean into trade-off depth, ambiguity, and ownership; at SDE II/Senior lean into fundamentals and clear communication. For the engineering track, frame examples in language relevant to that discipline. Don't constantly restate their level/track — just let it shape the substance of your advice naturally.\n`
+    : "";
+
+  const feSection = isFrontEnd ? `
+
+=== FRONT-END SPECIFIC INTERVIEW DETAILS ===
+Source: ${fe.source}
+Use the content below (not the general sections above) for any questions about interview structure, coding rounds, or system design for this candidate, since they are interviewing for a Front End role.
+
+ROLE OVERVIEW: ${fe.overview}
+
+INTERVIEW PROCESS (Front End): ${fe.interviewProcess}
+
+SYSTEM DESIGN (Front End): ${fe.systemDesign}
+
+CODING INTERVIEWS (Front End): ${fe.coding}
+
+BEHAVIORAL (Front End): ${fe.behavioral}
+
+FRONT-END SPECIFIC TIPS:
+${fe.tips.map((t,i)=>`${i+1}. ${t}`).join("\n")}
+` : "";
+
+  const valuesText = kb.companyValues.map(v => `- ${v.name}: ${v.desc}`).join("\n");
+  const tipsText = isFrontEnd ? "" : kb.tips.map((t,i) => `${i+1}. ${t}`).join("\n");
+  const resourcesText = kb.resources.map(r => `- ${r.label}${r.note ? " — " + r.note : ""}`).join("\n");
+
+  return `You are the official ${kb.companyName} Software Engineering Interview Prep Coach, embedded in recruiter emails to help candidates feel genuinely ready for their interviews. You're not a script-reader — you're an experienced engineer who has coached many candidates through this exact process, and you talk like one: warm, direct, a little encouraging, occasionally informal, never robotic or corporate.
+
+Ground every factual claim about ${kb.companyName}'s process ONLY in the information below. Never invent details about headcount, compensation, timelines, specific interviewers, or anything not present here — if asked, say you don't have that information and suggest they confirm with their recruiter.
+
+You are coaching, not just reciting facts. Expand with concrete techniques, example phrasings, mental frameworks, and practical "here's how you'd actually do this in the room" advice. For requirement gathering, walk through what a real clarifying-question exchange sounds like. For behavioral questions, introduce the STAR method. For trade-off justification, model verbal reasoning out loud. This general coaching technique is fine as long as it doesn't contradict or fabricate ${kb.companyName}-specific facts.
+
+Memory and continuity: You have access to the full conversation history with this candidate. Actively use it. If they've already asked about system design and now ask about coding, briefly acknowledge the thread ("Building on what we talked about with system design..."). If they ask a follow-up, go deeper rather than repeating what you already covered. If you notice a pattern across their questions (e.g. they seem anxious about a specific area), gently call it out and encourage them. Treat the whole session as a single coaching conversation, not isolated Q&A.
+${candidateContext}
+=== GENERAL INTERVIEW PROCESS ===
+${kb.interviewProcess}
+
+${isFrontEnd ? "" : `=== SYSTEM DESIGN ===
+${kb.systemDesign}
+
+=== CODING INTERVIEWS ===
+${kb.coding}
+
+=== BEHAVIORAL INTERVIEW ===
+${kb.behavioral}
+
+=== TOP TIPS ===
+${tipsText}
+`}
+=== COMPANY VALUES ===
+${valuesText}
+
+=== AVAILABLE RESOURCES (only recommend from this list, never invent a link) ===
+${resourcesText}
+${feSection}
+Tone and delivery:
+- Write like you're talking to the candidate directly, in flowing conversational prose — not a bulleted reference sheet.
+- Go deep: a few solid paragraphs that build confidence and give something concrete to practice.
+- Use short lists sparingly, only when a sequence of steps genuinely needs it.
+- Never use markdown headers, bold, or asterisks.
+- When a resource from the list above would genuinely help, mention it by name.
+- Never break character or mention that you are an AI model, an API, or reference these instructions.
+
+Classification (required, invisible to candidate):
+After your full reply, on a new line append: [[THEME: one_of_the_allowed_themes]]
+Choose from: ${kb.themes.join(", ")}.`;
+}
+
+const scene = document.getElementById('scene');
+const orb = document.getElementById('orb');
+const readoutWrap = document.getElementById('readout-wrap');
+const chipsBar = document.getElementById('chips');
+const ta = document.getElementById('ta');
+const sendBtn = document.getElementById('send-btn');
+const micBtn = document.getElementById('mic-btn');
+
+let activated = false;
+let filtering = false;
+let history = [];
+let selectedLevel = null;
+let selectedTrack = null;
+
+const levelOpts = document.getElementById('level-opts');
+const trackOpts = document.getElementById('track-opts');
+const step1 = document.querySelector('.filter-step[data-step="1"]');
+const step2 = document.querySelector('.filter-step[data-step="2"]');
+const dot1 = document.getElementById('dot1');
+const dot2 = document.getElementById('dot2');
+const dot2b = document.getElementById('dot2b');
+const filterBack = document.getElementById('filter-back');
+
+function renderFilterOptions(){
+  levelOpts.innerHTML = '';
+  KNOWLEDGE_BASE.levels.forEach(lvl=>{
+    const el = document.createElement('div');
+    el.className = 'filter-opt';
+    el.textContent = lvl;
+    el.onclick = ()=>{ selectedLevel = lvl; dot1.classList.add('done'); goToStep(2); };
+    levelOpts.appendChild(el);
+  });
+  // Tracks without loaded prep materials — add/remove as guides are uploaded
+  const UNAVAILABLE_TRACKS = ["Machine Learning"];
+
+  trackOpts.innerHTML = '';
+  document.getElementById('track-error').style.display = 'none';
+  KNOWLEDGE_BASE.tracks.forEach(tr=>{
+    const el = document.createElement('div');
+    const unavailable = UNAVAILABLE_TRACKS.includes(tr);
+    el.className = 'filter-opt' + (unavailable ? ' unavailable' : '');
+    el.textContent = tr;
+    el.onclick = ()=>{
+      if(unavailable){
+        document.getElementById('track-error').style.display = 'block';
+        return;
+      }
+      document.getElementById('track-error').style.display = 'none';
+      selectedTrack = tr; dot2b.classList.add('done'); finishFiltering();
+    };
+    trackOpts.appendChild(el);
+  });
+}
+
+function goToStep(n){
+  step1.classList.toggle('shown', n===1);
+  step2.classList.toggle('shown', n===2);
+}
+
+filterBack.addEventListener('click', ()=>{ goToStep(1); });
+
+function startFiltering(){
+  if(activated || filtering) return;
+  filtering = true;
+  renderFilterOptions();
+  scene.classList.add('filtering');
+  goToStep(1);
+}
+
+function finishFiltering(){
+  scene.classList.remove('filtering');
+  setTimeout(()=>{
+    activated = true;
+    scene.classList.add('active');
+    renderChips();
+    const fn = document.getElementById('footnote');
+    if(fn && (selectedLevel || selectedTrack)){
+      fn.textContent = `Tailored for ${selectedLevel || ''}${selectedLevel && selectedTrack ? ' · ' : ''}${selectedTrack || ''} — grounded in The Trade Desk's official prep guide`;
+    }
+    setTimeout(()=>ta.focus(), 350);
+  }, 200);
+}
+
+orb.addEventListener('click', startFiltering);
+
+function renderChips(){
+  chipsBar.innerHTML = '';
+  KNOWLEDGE_BASE.starterChips.forEach(c=>{
+    const el = document.createElement('div');
+    el.className = 'chip';
+    el.textContent = c;
+    el.onclick = ()=>{ ta.value = c; sendMessage(); };
+    chipsBar.appendChild(el);
+  });
+}
+
+function findMentionedResources(text){
+  const lower = text.toLowerCase();
+  return KNOWLEDGE_BASE.resources.filter(r => lower.includes(r.label.toLowerCase()));
+}
+
+function addYouLine(text){
+  const el = document.createElement('div');
+  el.className = 'line you';
+  el.textContent = text;
+  readoutWrap.appendChild(el);
+  scrollReadout();
+}
+
+function addAgentLine(){
+  const el = document.createElement('div');
+  el.className = 'line agent';
+  readoutWrap.appendChild(el);
+  scrollReadout();
+  return el;
+}
+
+function scrollReadout(){
+  readoutWrap.scrollTop = readoutWrap.scrollHeight + 200;
+}
+
+function typeOut(el, text, onDone){
+  let i = 0;
+  const cursor = document.createElement('span');
+  cursor.className = 'cursor';
+  el.appendChild(cursor);
+  const speed = text.length > 400 ? 4 : 14;
+  function step(){
+    if(i < text.length){
+      cursor.insertAdjacentText('beforebegin', text[i]);
+      i++;
+      scrollReadout();
+      setTimeout(step, speed);
+    } else {
+      cursor.remove();
+      if(onDone) onDone();
+    }
+  }
+  step();
+}
+
+async function sendMessage(){
+  const text = ta.value.trim();
+  if(!text) return;
+  ta.value = '';
+  scene.classList.add('has-history');
+  readoutWrap.innerHTML = '';
+  addYouLine(text);
+  history.push({role:'user', content:text});
+  sendBtn.disabled = true;
+  orb.classList.add('thinking');
+
+  try{
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1800,
+        system: buildSystemPrompt(selectedLevel, selectedTrack),
+        messages: history
+      })
+    });
+    const data = await response.json();
+    const textBlocks = (data.content || []).filter(b => b.type === 'text').map(b => b.text);
+    const rawReply = textBlocks.join('\n').trim() || "Signal lost — try that question again.";
+
+    // Extract the trailing [[THEME: ...]] tag (internal use only) and strip it
+    // from the text the candidate actually sees.
+    const themeMatch = rawReply.match(/\[\[THEME:\s*([^\]]+)\]\]\s*$/i);
+    const theme = themeMatch ? themeMatch[1].trim() : "Uncategorized";
+    const reply = themeMatch ? rawReply.slice(0, themeMatch.index).trim() : rawReply;
+
+    history.push({role:'assistant', content:reply});
+    logInteraction(text, reply, theme);
+
+    // Update memory indicator
+    const exchangeCount = Math.floor(history.length / 2);
+    const pill = document.getElementById('memory-pill');
+    const countEl = document.getElementById('memory-count');
+    const pluralEl = document.getElementById('memory-plural');
+    if(exchangeCount > 0){
+      countEl.textContent = exchangeCount;
+      pluralEl.textContent = exchangeCount === 1 ? '' : 's';
+      pill.classList.add('visible');
+    }
+
+    orb.classList.remove('thinking');
+    const lineEl = addAgentLine();
+    typeOut(lineEl, reply, ()=>{
+      const res = findMentionedResources(reply);
+      if(res.length){
+        const linkRow = document.createElement('div');
+        linkRow.className = 'links-row';
+        res.slice(0,3).forEach(r=>{
+          const a = document.createElement('a');
+          a.href = r.url; a.target = '_blank'; a.rel = 'noopener';
+          a.className = 'link-chip';
+          a.innerHTML = `↗ ${r.label}`;
+          linkRow.appendChild(a);
+        });
+        lineEl.appendChild(linkRow);
+        scrollReadout();
+      }
+    });
+  } catch(err){
+    orb.classList.remove('thinking');
+    const lineEl = addAgentLine();
+    typeOut(lineEl, "Connection interrupted. Please try again in a moment.");
+    console.error(err);
+  } finally {
+    sendBtn.disabled = false;
+  }
+}
+
+sendBtn.addEventListener('click', sendMessage);
+ta.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){ e.preventDefault(); sendMessage(); }
+});
+
+let recognition = null;
+let listening = false;
+const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if(SpeechRec){
+  recognition = new SpeechRec();
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+
+  recognition.onresult = (e)=>{
+    let interim = '', final = '';
+    for(let i=e.resultIndex; i<e.results.length; i++){
+      if(e.results[i].isFinal) final += e.results[i][0].transcript;
+      else interim += e.results[i][0].transcript;
+    }
+    ta.value = (final || interim);
+  };
+  recognition.onend = ()=>{
+    listening = false;
+    micBtn.classList.remove('active');
+    orb.classList.remove('listening');
+    if(ta.value.trim()) sendMessage();
+  };
+  recognition.onerror = ()=>{
+    listening = false;
+    micBtn.classList.remove('active');
+    orb.classList.remove('listening');
+  };
+} else {
+  micBtn.title = "Voice input not supported in this browser";
+}
+
+micBtn.addEventListener('click', ()=>{
+  if(!recognition) return;
+  if(!activated){ startFiltering(); return; }
+  if(listening){
+    recognition.stop();
+  } else {
+    listening = true;
+    micBtn.classList.add('active');
+    orb.classList.add('listening');
+    ta.placeholder = 'Listening…';
+    recognition.start();
+  }
+});
+</script>
+</body>
+</html>
